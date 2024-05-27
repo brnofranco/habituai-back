@@ -6,3 +6,5 @@ export const jwtConstants = {
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const SkipAuth = () => SetMetadata(IS_PUBLIC_KEY, true);
+
+export const bcryptSalts = process.env.BCRYPT_SALTS || '10';

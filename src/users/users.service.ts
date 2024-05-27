@@ -11,7 +11,15 @@ export class UsersService {
 	}
 
 	async register(data: Prisma.UserCreateInput): Promise<User> {
-		return this.prisma.user.create({ data });
+		const { email, name, password } = data;
+
+		return this.prisma.user.create({
+			data: {
+				email,
+				name,
+				password,
+			},
+		});
 	}
 
 	async update(params: { where: Prisma.UserWhereUniqueInput; data: Prisma.UserUpdateInput }): Promise<User> {
