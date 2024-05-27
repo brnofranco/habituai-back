@@ -102,3 +102,18 @@ ALTER TABLE "HabitDayWeek" ADD CONSTRAINT "HabitDayWeek_habitId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "Progress" ADD CONSTRAINT "Progress_habitId_fkey" FOREIGN KEY ("habitId") REFERENCES "Habit"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+
+-- InsertAvatars
+INSERT INTO "Avatar" (id, image) VALUES (1, 'image')
+INSERT INTO "Avatar" (id, image) VALUES (2, 'image')
+INSERT INTO "Avatar" (id, image) VALUES (3, 'image')
+INSERT INTO "Avatar" (id, image) VALUES (4, 'image')
+INSERT INTO "Avatar" (id, image) VALUES (5, 'image')
+INSERT INTO "Avatar" (id, image) VALUES (6, 'image')
+
+-- InsertCategories
+INSERT INTO "Category" (id, title) VALUES (1, 'Saúde');
+INSERT INTO "Category" (id, title) VALUES (2, 'Educação');
+INSERT INTO "Category" (id, title) VALUES (3, 'Lazer');
+INSERT INTO "Category" (id, title) VALUES (4, 'Outro');
