@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int     @id @unique @default(autoincrement())
+  email      String  @unique
+  name       String
+  password   String
+  experience Int     @default(0)
+  avatar     Avatar  @relation(fields: [avatarId], references: [id])
+  avatarId   Int     @default(1)
+  habit      Habit[]
+}
+
+model Avatar {
+  id    Int    @id @unique @default(autoincrement())
+  image String @unique
+  user  User[]
+}
+
+model Category {
+  id    Int     @id @unique @default(autoincrement())
+  title String  @unique
+  habit Habit[]
+}
+
+model Habit {
+  id           Int            @id @unique @default(autoincrement())
+  user         User           @relation(fields: [userId], references: [id])
+  userId       Int
+  category     Category       @relation(fields: [categoryId], references: [id])
+  categoryId   Int
+  name         String
+  isBad        Boolean
+  weight       Int
+  createdAt    DateTime       @default(now())
+  isActive     Boolean        @default(true)
+  habitDayWeek HabitDayWeek[]
+  progress     Progress[]
+}
+
+model HabitDayWeek {
+  id         Int       @id @unique @default(autoincrement())
+  habit      Habit     @relation(fields: [habitId], references: [id])
+  habitId    Int
+  weekDay    Int
+  createdAt  DateTime  @default(now())
+  finishedAt DateTime?
+}
+
+model Progress {
+  id      Int      @id @unique @default(autoincrement())
+  habit   Habit    @relation(fields: [habitId], references: [id])
+  habitId Int
+  doneAt  DateTime
+  dayWeek Int
+}
