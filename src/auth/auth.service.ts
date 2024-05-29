@@ -1,19 +1,19 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
-import { RegisterUserDto } from 'src/users/register-user.dto';
+import { UserService } from '../user/user.service';
+import { RegisterUserDto } from 'src/user/register-user.dto';
 import { bcryptSalts } from './constants';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
 	constructor(
-		private usersService: UsersService,
+		private userService: UserService,
 		private jwtService: JwtService,
 	) {}
 
 	async signIn(email: string, password: string): Promise<{ token: string }> {
-		const user = await this.usersService.find(email);
+		const user = await this.userService.findByEmail(email);
 
 		if (!user) {
 			console.error('[signIn] User not found!');
@@ -27,7 +27,7 @@ export class AuthService {
 			throw new UnauthorizedException();
 		}
 
-		const payloadJWT = { sub: user.id, email: user.email };
+		const payloadJWT = { id: user.id, email: user.email };
 
 		const token = await this.jwtService.signAsync(payloadJWT);
 		console.log('[signIn] User logged successfully!');
@@ -37,7 +37,7 @@ export class AuthService {
 	async register(payload: RegisterUserDto): Promise<void> {
 		const { email, password } = payload;
 
-		const user = await this.usersService.find(email);
+		const user = await this.userService.findByEmail(email);
 
 		if (user) {
 			console.error('[register] User already registered!');
@@ -47,11 +47,12 @@ export class AuthService {
 		await bcrypt
 			.hash(password, bcryptSalts)
 			.then((encryptedPassword) => {
-				this.usersService.register({ ...payload, password: encryptedPassword });
+				this.userService.register({ ...payload, password: encryptedPassword });
 				console.log('[register] User created successfully!');
 			})
 			.catch((error) => {
 				console.error('[register] User cannot be created!', error);
+				throw new HttpException('User cannot be created!', HttpStatus.INTERNAL_SERVER_ERROR);
 			});
 	}
 }
