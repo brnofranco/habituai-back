@@ -1,13 +1,13 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put, Request } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 import { TokenPayload } from 'src/auth/token-payload';
 import { Prisma } from '@prisma/client';
 import { SkipAuth } from 'src/auth/constants';
-import { RegisterUserDto } from './register-user.dto';
+import { RegisterUsersDto } from './register-users.dto';
 
-@Controller('user')
-export class UserController {
-	constructor(private userService: UserService) {}
+@Controller('users')
+export class UsersController {
+	constructor(private userService: UsersService) {}
 
 	@Get()
 	getUser(@Request() request: { user: TokenPayload }) {
@@ -24,7 +24,7 @@ export class UserController {
 	@SkipAuth()
 	@HttpCode(HttpStatus.OK)
 	@Post()
-	register(@Body() registerDto: RegisterUserDto) {
+	register(@Body() registerDto: RegisterUsersDto) {
 		return this.userService.register(registerDto);
 	}
 }

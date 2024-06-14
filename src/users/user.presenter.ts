@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 
-export class UserPresenter {
+export class UsersPresenter {
 	constructor(readonly user: User) {}
 
 	toJSON() {

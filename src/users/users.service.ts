@@ -3,14 +3,14 @@ import { User, Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 import * as bcrypt from 'bcrypt';
 import { bcryptSalts } from 'src/auth/constants';
-import { UserPresenter } from './user.presenter';
-import { RegisterUserDto } from './register-user.dto';
+import { UsersPresenter } from './user.presenter';
+import { RegisterUsersDto } from './register-users.dto';
 
 @Injectable()
-export class UserService {
+export class UsersService {
 	constructor(private prisma: DatabaseService) {}
 
-	async register(payload: RegisterUserDto) {
+	async register(payload: RegisterUsersDto) {
 		const { name, email, password } = payload;
 
 		const user = await this.findByEmail(email);
@@ -28,7 +28,7 @@ export class UserService {
 
 			console.log('[register] User created successfully!');
 
-			return new UserPresenter(createdUser);
+			return new UsersPresenter(createdUser);
 		} catch (error) {
 			console.error('[register] User cannot be created!', error);
 			throw new HttpException('User cannot be created!', HttpStatus.INTERNAL_SERVER_ERROR);
