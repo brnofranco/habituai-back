@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SkipAuth } from './constants';
-import { RegisterUserDto } from 'src/user/register-user.dto';
+import { LoginDto } from './login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -10,14 +10,7 @@ export class AuthController {
 	@SkipAuth()
 	@HttpCode(HttpStatus.OK)
 	@Post('login')
-	signIn(@Body() signInDto: Record<string, any>) {
-		return this.authService.signIn(signInDto.email, signInDto.password);
-	}
-
-	@SkipAuth()
-	@HttpCode(HttpStatus.OK)
-	@Post('register')
-	register(@Body() registerDto: RegisterUserDto) {
-		return this.authService.register(registerDto);
+	signIn(@Body() loginDto: LoginDto) {
+		return this.authService.login(loginDto);
 	}
 }
